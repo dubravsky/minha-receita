@@ -56,7 +56,7 @@ func Transform(dir string, db database, maxParallelDBQueries, batchSize int, pri
 	if err := kv.load(dir, &l); err != nil {
 		return fmt.Errorf("error loading data to badger: %w", err)
 	}
-	j, err := createJSONRecordsTask(dir, db, &l, kv, batchSize, privacy)
+	j, err := createJSONRecordsTask(dir, db, nil, &l, kv, batchSize, privacy)
 	if err != nil {
 		return fmt.Errorf("error creating new task for venues in %s: %w", dir, err)
 	}

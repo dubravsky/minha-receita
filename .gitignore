@@ -3,4 +3,5 @@ bin/
 data/
 minha-receita
 site/
+.idea/
 ~/data/.gitkeep

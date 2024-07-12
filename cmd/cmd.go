@@ -118,6 +118,7 @@ func CLI() *cobra.Command {
 		createCmd,
 		dropCmd,
 		transformCLI(),
+		exportCLI(),
 		sampleCLI(),
 		mirrorCLI(),
 	} {

@@ -6,7 +6,7 @@ import (
 )
 
 type baseData struct {
-	CodigoPorte               *int     `json:"codigo_porte"`
+	CodigoPorte               *int     `json:"zip_code"`
 	Porte                     *string  `json:"porte"`
 	RazaoSocial               string   `json:"razao_social"`
 	CodigoNaturezaJuridica    *int     `json:"codigo_natureza_juridica"`

@@ -33,6 +33,23 @@ func saveBatch(db database, b []company) (int, error) {
 	return len(s), nil
 }
 
+func exportBatch(writer io.StringWriter, b []company) (int, error) {
+	if len(b) == 0 {
+		return 0, nil
+	}
+	for _, c := range b {
+		j, err := c.JSON()
+		if err != nil {
+			return 0, fmt.Errorf("error getting company %s as json: %w", cnpj.Mask(c.CNPJ), err)
+		}
+		if _, err = writer.WriteString(j); err != nil {
+			return 0, fmt.Errorf("error write file %s", err)
+		}
+		writer.WriteString("\n")
+	}
+	return len(b), nil
+}
+
 type venuesTask struct {
 	source            *source
 	lookups           *lookups
@@ -40,6 +57,7 @@ type venuesTask struct {
 	privacy           bool
 	dir               string
 	db                database
+	out               io.StringWriter
 	batchSize         int
 	sentToBatches     int32
 	rows              chan []string
@@ -118,6 +136,47 @@ func (t *venuesTask) consumeRows() {
 	t.saved <- n
 }
 
+func (t *venuesTask) exportRows() {
+	defer t.shutdownWaitGroup.Done()
+	var b []company
+	for r := range t.rows {
+		if atomic.LoadInt32(&t.shutdown) == 1 { // check if must continue.
+			return
+		}
+		if int(atomic.AddInt32(&t.sentToBatches, 1)) == t.source.totalLines {
+			close(t.rows)
+		}
+		c, err := newCompany(r, t.lookups, t.kv, t.privacy)
+		if err != nil { // initiate graceful shutdown.
+			t.errors <- fmt.Errorf("error parsing company from %q: %w", r, err)
+			atomic.StoreInt32(&t.shutdown, 1)
+			return
+		}
+		b = append(b, c)
+		if len(b) >= t.batchSize {
+			n, err := exportBatch(t.out, b)
+			if err != nil { // initiate graceful shutdown.
+				t.errors <- fmt.Errorf("error saving companies: %w", err)
+				atomic.StoreInt32(&t.shutdown, 1)
+				return
+			}
+			t.saved <- n
+			b = []company{}
+		}
+	}
+	if len(b) == 0 || atomic.LoadInt32(&t.shutdown) == 1 { // check if must continue.
+		return
+	}
+	// send the remaining items in the batch
+	n, err := exportBatch(t.out, b)
+	if err != nil { // initiate graceful shutdown.
+		t.errors <- fmt.Errorf("error saving companies: %w", err)
+		atomic.StoreInt32(&t.shutdown, 1)
+		return
+	}
+	t.saved <- n
+}
+
 func (t *venuesTask) run(m int) error {
 	defer t.source.close()
 	if err := t.bar.RenderBlank(); err != nil {
@@ -154,7 +213,38 @@ func (t *venuesTask) run(m int) error {
 	}
 }
 
-func createJSONRecordsTask(dir string, db database, l *lookups, kv kvStorage, b int, p bool) (*venuesTask, error) {
+func (t *venuesTask) runExport() error {
+	defer t.source.close()
+	if err := t.bar.RenderBlank(); err != nil {
+		return fmt.Errorf("error rendering the progress bar: %w", err)
+	}
+	t.produceRows()
+	t.shutdownWaitGroup.Add(1)
+	go t.exportRows()
+	defer func() {
+		if t.source.totalLines != int(t.sentToBatches) {
+			close(t.rows)
+		}
+		if atomic.LoadInt32(&t.shutdown) == 1 {
+			t.shutdownWaitGroup.Wait()
+		}
+		close(t.saved)
+		close(t.errors)
+	}()
+	for {
+		select {
+		case err := <-t.errors:
+			return err
+		case n := <-t.saved:
+			t.bar.Add(n)
+			if t.bar.IsFinished() {
+				return nil
+			}
+		}
+	}
+}
+
+func createJSONRecordsTask(dir string, db database, out io.StringWriter, l *lookups, kv kvStorage, b int, p bool) (*venuesTask, error) {
 	v, err := newSource(venues, dir)
 	if err != nil {
 		return nil, fmt.Errorf("error creating a source for venues from %s: %w", dir, err)
@@ -166,6 +256,7 @@ func createJSONRecordsTask(dir string, db database, l *lookups, kv kvStorage, b 
 		privacy:       p,
 		dir:           dir,
 		db:            db,
+		out:           out,
 		batchSize:     b,
 		sentToBatches: 0,
 		rows:          make(chan []string),
