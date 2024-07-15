@@ -6,20 +6,20 @@ import (
 )
 
 type partnerData struct {
-	IdentificadorDeSocio                 *int    `json:"identificador_de_socio"`
-	NomeSocio                            string  `json:"nome_socio"`
-	CNPJCPFDoSocio                       string  `json:"cnpj_cpf_do_socio"`
-	CodigoQualificacaoSocio              *int    `json:"codigo_qualificacao_socio"`
-	QualificaoSocio                      *string `json:"qualificacao_socio"`
-	DataEntradaSociedade                 *date   `json:"data_entrada_sociedade"`
-	CodigoPais                           *int    `json:"codigo_pais"`
-	Pais                                 *string `json:"pais"`
-	CPFRepresentanteLegal                string  `json:"cpf_representante_legal"`
-	NomeRepresentanteLegal               string  `json:"nome_representante_legal"`
-	CodigoQualificacaoRepresentanteLegal *int    `json:"codigo_qualificacao_representante_legal"`
-	QualificacaoRepresentanteLegal       *string `json:"qualificacao_representante_legal"`
-	CodigoFaixaEtaria                    *int    `json:"codigo_faixa_etaria"`
-	FaixaEtaria                          *string `json:"faixa_etaria"`
+	IdentificadorDeSocio                 *int    `json:"partner_code"`
+	NomeSocio                            string  `json:"name"`
+	CNPJCPFDoSocio                       string  `json:"cnpj_cpf"`
+	CodigoQualificacaoSocio              *int    `json:"qualification_code"`
+	QualificaoSocio                      *string `json:"qualification"`
+	DataEntradaSociedade                 *date   `json:"company_entry_date"`
+	CodigoPais                           *int    `json:"country_code"`
+	Pais                                 *string `json:"code"`
+	CPFRepresentanteLegal                string  `json:"cpf_legal_representative"`
+	NomeRepresentanteLegal               string  `json:"name_legal_representative"`
+	CodigoQualificacaoRepresentanteLegal *int    `json:"legal_representative_qualification_code"`
+	QualificacaoRepresentanteLegal       *string `json:"legal_representative_qualification"`
+	CodigoFaixaEtaria                    *int    `json:"age_range_code"`
+	FaixaEtaria                          *string `json:"age_range"`
 }
 
 func (p *partnerData) faixaEtaria(v string) {

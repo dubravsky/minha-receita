@@ -17,53 +17,53 @@ func companyNameClenup(n string) string {
 
 type company struct {
 	CNPJ                             string        `json:"cnpj"`
-	IdentificadorMatrizFilial        *int          `json:"identificador_matriz_filial"`
-	DescricaoMatrizFilial            *string       `json:"descricao_identificador_matriz_filial"`
-	NomeFantasia                     string        `json:"nome_fantasia"`
-	SituacaoCadastral                *int          `json:"situacao_cadastral"`
-	DescricaoSituacaoCadastral       *string       `json:"descricao_situacao_cadastral"`
-	DataSituacaoCadastral            *date         `json:"data_situacao_cadastral"`
-	MotivoSituacaoCadastral          *int          `json:"motivo_situacao_cadastral"`
-	DescricaoMotivoSituacaoCadastral *string       `json:"descricao_motivo_situacao_cadastral"`
-	NomeCidadeNoExterior             string        `json:"nome_cidade_no_exterior"`
-	CodigoPais                       *int          `json:"codigo_pais"`
-	Pais                             *string       `json:"pais"`
-	DataInicioAtividade              *date         `json:"data_inicio_atividade"`
-	CNAEFiscal                       *int          `json:"cnae_fiscal"`
-	CNAEFiscalDescricao              *string       `json:"cnae_fiscal_descricao"`
-	DescricaoTipoDeLogradouro        string        `json:"descricao_tipo_de_logradouro"`
-	Logradouro                       string        `json:"logradouro"`
-	Numero                           string        `json:"numero"`
-	Complemento                      string        `json:"complemento"`
+	IdentificadorMatrizFilial        *int          `json:"branch_type"`
+	DescricaoMatrizFilial            *string       `json:"branch_type_description"`
+	NomeFantasia                     string        `json:"trade_mark"`
+	SituacaoCadastral                *int          `json:"registration_status_code"`
+	DescricaoSituacaoCadastral       *string       `json:"registration_status"`
+	DataSituacaoCadastral            *date         `json:"registration_update_date"`
+	MotivoSituacaoCadastral          *int          `json:"closing_status_code"`
+	DescricaoMotivoSituacaoCadastral *string       `json:"closing_status_reason"`
+	NomeCidadeNoExterior             string        `json:"international_city_name"`
+	CodigoPais                       *int          `json:"country_code"`
+	Pais                             *string       `json:"country"`
+	DataInicioAtividade              *date         `json:"activity_start_date"`
+	CNAEFiscal                       *int          `json:"cnae_code"`
+	CNAEFiscalDescricao              *string       `json:"cnae_description"`
+	DescricaoTipoDeLogradouro        string        `json:"street_type"`
+	Logradouro                       string        `json:"street"`
+	Numero                           string        `json:"number"`
+	Complemento                      string        `json:"additional"`
 	Bairro                           string        `json:"bairro"`
 	CEP                              string        `json:"cep"`
 	UF                               string        `json:"uf"`
-	CodigoMunicipio                  *int          `json:"codigo_municipio"`
-	CodigoMunicipioIBGE              *int          `json:"codigo_municipio_ibge"`
-	Municipio                        *string       `json:"municipio"`
-	Telefone1                        string        `json:"ddd_telefone_1"`
-	Telefone2                        string        `json:"ddd_telefone_2"`
-	Fax                              string        `json:"ddd_fax"`
+	CodigoMunicipio                  *int          `json:"municipality_code"`
+	CodigoMunicipioIBGE              *int          `json:"ibge_municipality_code"`
+	Municipio                        *string       `json:"municipality"`
+	Telefone1                        string        `json:"phone1"`
+	Telefone2                        string        `json:"phone2"`
+	Fax                              string        `json:"fax"`
 	Email                            *string       `json:"email"`
-	SituacaoEspecial                 string        `json:"situacao_especial"`
-	DataSituacaoEspecial             *date         `json:"data_situacao_especial"`
-	OpcaoPeloSimples                 *bool         `json:"opcao_pelo_simples"`
-	DataOpcaoPeloSimples             *date         `json:"data_opcao_pelo_simples"`
-	DataExclusaoDoSimples            *date         `json:"data_exclusao_do_simples"`
-	OpcaoPeloMEI                     *bool         `json:"opcao_pelo_mei"`
-	DataOpcaoPeloMEI                 *date         `json:"data_opcao_pelo_mei"`
-	DataExclusaoDoMEI                *date         `json:"data_exclusao_do_mei"`
-	RazaoSocial                      string        `json:"razao_social"`
-	CodigoNaturezaJuridica           *int          `json:"codigo_natureza_juridica"`
-	NaturezaJuridica                 *string       `json:"natureza_juridica"`
-	QualificacaoDoResponsavel        *int          `json:"qualificacao_do_responsavel"`
-	CapitalSocial                    *float32      `json:"capital_social"`
-	CodigoPorte                      *int          `json:"codigo_porte"`
-	Porte                            *string       `json:"porte"`
-	EnteFederativoResponsavel        string        `json:"ente_federativo_responsavel"`
-	DescricaoPorte                   string        `json:"descricao_porte"`
+	SituacaoEspecial                 string        `json:"special_code"`
+	DataSituacaoEspecial             *date         `json:"special_situation_date"`
+	OpcaoPeloSimples                 *bool         `json:"simple_taxes_status"`
+	DataOpcaoPeloSimples             *date         `json:"simple_taxes_start_date"`
+	DataExclusaoDoSimples            *date         `json:"simple_taxes_exclusion_date"`
+	OpcaoPeloMEI                     *bool         `json:"individual_taxpayer_status"`
+	DataOpcaoPeloMEI                 *date         `json:"individual_taxpayer_start_date"`
+	DataExclusaoDoMEI                *date         `json:"individual_taxpayer_delete_date"`
+	RazaoSocial                      string        `json:"full_name"`
+	CodigoNaturezaJuridica           *int          `json:"legal_entity_type_code"`
+	NaturezaJuridica                 *string       `json:"legal_type"`
+	QualificacaoDoResponsavel        *int          `json:"personal_responsability_code"`
+	CapitalSocial                    *float32      `json:"charter_capital"`
+	CodigoPorte                      *int          `json:"business_size_code"`
+	Porte                            *string       `json:"business_size"`
+	EnteFederativoResponsavel        string        `json:"responsible_federative_entity"`
+	DescricaoPorte                   string        `json:"business_size_description"`
 	QuadroSocietario                 []partnerData `json:"qsa"`
-	CNAESecundarios                  []cnae        `json:"cnaes_secundarios"`
+	CNAESecundarios                  []cnae        `json:"additional_cnae"`
 }
 
 func (c *company) situacaoCadastral(v string) error {

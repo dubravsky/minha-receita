@@ -1,6 +1,9 @@
 .env
 bin/
 data/
+sample_data/
+export.json
+export.json.gz
 minha-receita
 site/
 .idea/

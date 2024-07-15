@@ -119,8 +119,8 @@ func (c *company) municipio(l *lookups, v string) error {
 }
 
 type cnae struct {
-	Codigo    int    `json:"codigo"`
-	Descricao string `json:"descricao"`
+	Codigo    int    `json:"code"`
+	Descricao string `json:"description"`
 }
 
 func newCnae(l *lookups, v string) (cnae, error) {
